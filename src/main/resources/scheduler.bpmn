@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_14tp70y" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
   <bpmn:collaboration id="Collaboration_0ddcl2v">
-    <bpmn:participant id="Participant_1gw5gkj" name="Сервер" processRef="Process_1x2xl4r" />
+    <bpmn:participant id="Participant_1gw5gkj" name="Сервер" processRef="Scheduler" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1x2xl4r" isExecutable="true">
+  <bpmn:process id="Scheduler" name="Scheduler" isExecutable="false">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_04ogxs9</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_15o9ma4">

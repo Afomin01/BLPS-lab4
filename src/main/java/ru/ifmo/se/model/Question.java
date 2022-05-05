@@ -37,7 +37,7 @@ import java.util.UUID;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String title;
     @Lob

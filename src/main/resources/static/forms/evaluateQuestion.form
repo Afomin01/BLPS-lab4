@@ -1,10 +1,24 @@
 {
   "components": [
     {
+      "label": "Question title",
+      "type": "textfield",
+      "id": "Field_02zsnn0",
+      "key": "questionTitle",
+      "description": "Question title"
+    },
+    {
+      "label": "Question Text",
+      "type": "textfield",
+      "id": "Field_0f7ri3e",
+      "key": "questionText",
+      "description": "Question Text"
+    },
+    {
       "label": "Вопрос соответсвует правилам",
       "type": "checkbox",
       "id": "Field_0la6lky",
-      "key": "accept",
+      "key": "accepted",
       "disabled": false
     }
   ],

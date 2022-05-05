@@ -25,7 +25,7 @@ import java.util.UUID;
 public class UserQuestionVote {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "question_id", nullable = false)

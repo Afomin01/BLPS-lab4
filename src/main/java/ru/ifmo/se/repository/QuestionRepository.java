@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface QuestionRepository extends JpaRepository<Question, UUID> {
+public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findByRatingLessThan(int rating);
 
     @Query("select q from Question q where q.rating <= ?1 and q.needsModeration = false ")
