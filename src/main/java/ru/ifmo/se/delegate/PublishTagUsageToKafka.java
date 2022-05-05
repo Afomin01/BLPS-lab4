@@ -9,7 +9,5 @@ public class PublishTagUsageToKafka implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         String tagName = (String) delegateExecution.getVariable("tag");
-
-        System.out.println(tagName);
     }
 }

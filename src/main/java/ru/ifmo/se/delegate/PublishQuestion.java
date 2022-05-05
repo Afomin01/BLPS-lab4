@@ -49,7 +49,5 @@ public class PublishQuestion implements JavaDelegate {
         );
 
         question = questionRepository.save(question);
-
-        delegateExecution.setVariable("question", question);
     }
 }
