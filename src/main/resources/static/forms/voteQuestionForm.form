@@ -1,0 +1,29 @@
+{
+  "components": [
+    {
+      "label": "Question id",
+      "type": "textfield",
+      "id": "Field_153r6m5",
+      "key": "questionId",
+      "validate": {
+        "regularExpressionPattern": "\\d+"
+      },
+      "description": "Enter question id"
+    },
+    {
+      "label": "I like question",
+      "type": "checkbox",
+      "id": "Field_06jeuzf",
+      "key": "likeQuestion"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0w48w45",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}

@@ -72,15 +72,15 @@
       <bpmn:incoming>Flow_0wwkooq</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0wwkooq" sourceRef="Activity_1txohj8" targetRef="Event_1h8bj0e" />
-    <bpmn:userTask id="Activity_1txohj8" name="Получение уведомления о завершении модерации">
+    <bpmn:userTask id="Activity_1txohj8" name="Получение уведомления о завершении модерации" camunda:candidateGroups="moderators">
       <bpmn:incoming>Flow_1v1dpko</bpmn:incoming>
       <bpmn:outgoing>Flow_0wwkooq</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_0u4o90s" name="Уведомление сообщение об отсутствии вопросов">
+    <bpmn:userTask id="Activity_0u4o90s" name="Уведомление сообщение об отсутствии вопросов" camunda:candidateGroups="moderators">
       <bpmn:incoming>Flow_0ir3uw0</bpmn:incoming>
       <bpmn:outgoing>Flow_1ujpf06</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_0nrw7mj" name="Оценить полученный вопрос" camunda:formKey="camunda-forms:/forms/evaluateQuestion.form">
+    <bpmn:userTask id="Activity_0nrw7mj" name="Оценить полученный вопрос" camunda:formKey="camunda-forms:/forms/evaluateQuestion.form" camunda:candidateGroups="moderators">
       <bpmn:incoming>Flow_1bpfm8s</bpmn:incoming>
       <bpmn:outgoing>Flow_1i3dmy2</bpmn:outgoing>
     </bpmn:userTask>
