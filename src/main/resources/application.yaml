@@ -5,6 +5,10 @@ spring:
     username: postgres
   jpa:
     generate-ddl: true
+  kafka:
+    consumer:
+      group-id: app.1
+    bootstrap-servers: localhost:9092
 
 camunda.bpm.admin-user:
   id: admin
