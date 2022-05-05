@@ -1,0 +1,42 @@
+{
+  "components": [
+    {
+      "label": "Title",
+      "type": "textfield",
+      "id": "Field_0xjj4qh",
+      "key": "questionTitle",
+      "description": "Enter question title",
+      "validate": {
+        "minLength": 16,
+        "maxLength": 255
+      }
+    },
+    {
+      "label": "Question content",
+      "type": "textfield",
+      "id": "Field_1un38gc",
+      "key": "questionText",
+      "description": "Enter your question here",
+      "validate": {
+        "minLength": 64
+      }
+    },
+    {
+      "label": "Tags",
+      "type": "textfield",
+      "id": "Field_0ihae0u",
+      "key": "questionTags",
+      "description": "Enter tags here and separate them by ,",
+      "validate": {}
+    }
+  ],
+  "type": "default",
+  "id": "Form_1iaxwf6",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}
