@@ -18,6 +18,6 @@ public class CheckIfTagExists implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         String tagName = (String) delegateExecution.getVariable("newTag");
         boolean tagExists = tagRepository.existsByName(tagName);
-        delegateExecution.setVariable("exist", 1);
+        delegateExecution.setVariable("exist", tagExists);
     }
 }

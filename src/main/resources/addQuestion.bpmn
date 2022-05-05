@@ -73,9 +73,11 @@
       <bpmn:incoming>Flow_13k2y4f</bpmn:incoming>
       <bpmn:outgoing>Flow_1khc58f</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="questionTagsCollection" camunda:elementVariable="newTag" />
-      <bpmn:sequenceFlow id="Flow_1sxuqcs" name="Тег не существует" sourceRef="Gateway_0v03uh9" targetRef="Gateway_0g0hr0p" />
+      <bpmn:sequenceFlow id="Flow_1sxuqcs" name="Тег не существует" sourceRef="Gateway_0v03uh9" targetRef="Gateway_0g0hr0p">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{!exist}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0v1b66z" name="Тег существует" sourceRef="Gateway_0v03uh9" targetRef="Event_0l32e2u">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{exist &gt; 0}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{exist}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0px88go" sourceRef="Activity_0d23t0d" targetRef="Gateway_0v03uh9" />
       <bpmn:sequenceFlow id="Flow_0u61yli" sourceRef="Event_1tpusau" targetRef="Activity_0d23t0d" />
