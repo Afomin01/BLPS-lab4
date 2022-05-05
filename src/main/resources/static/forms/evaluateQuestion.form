@@ -1,0 +1,20 @@
+{
+  "components": [
+    {
+      "label": "Вопрос соответсвует правилам",
+      "type": "checkbox",
+      "id": "Field_0la6lky",
+      "key": "accept",
+      "disabled": false
+    }
+  ],
+  "type": "default",
+  "id": "EvaluateQuestionForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}
