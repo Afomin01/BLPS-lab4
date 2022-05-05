@@ -8,17 +8,22 @@
       <bpmn:lane id="Lane_01op23c" name="Сервер">
         <bpmn:flowNodeRef>Activity_02zfrla</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_18lpnvf</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_03cni4n</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1sw14hp</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1mi9lz5</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1bawvuk</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0mlai9d</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1cm3cgz</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1sw14hp</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_0h2188u</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1om2z8n</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0j6iqab</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_06qih9u</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1om2z8n</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0h2188u</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1j7gj3w</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_0xg491d" name="Kafka" />
+      <bpmn:lane id="Lane_0xg491d" name="Kafka">
+        <bpmn:flowNodeRef>Event_1ik2gfx</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1alcaus</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0810w1n</bpmn:flowNodeRef>
+      </bpmn:lane>
       <bpmn:lane id="Lane_1w9vu64" name="Пользователь">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_19w979x</bpmn:flowNodeRef>
@@ -29,29 +34,25 @@
         <bpmn:flowNodeRef>Activity_0aufay6</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:startEvent id="StartEvent_1" name="Пользователь хочет задать вопрос">
-      <bpmn:outgoing>Flow_048giaw</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:userTask id="Activity_19w979x" name="Пользователь заполняет форму вопроса" camunda:formKey="camunda-forms:/forms/addQuestionForm.form" camunda:candidateGroups="users">
-      <bpmn:incoming>Flow_048giaw</bpmn:incoming>
-      <bpmn:outgoing>Flow_0iy6jzv</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_02zfrla" name="Валидация введенных пользователем данных" camunda:delegateExpression="#{validateQuestionData}">
-      <bpmn:extensionElements />
-      <bpmn:incoming>Flow_1fe1f8x</bpmn:incoming>
-      <bpmn:outgoing>Flow_13k2y4f</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="Activity_0oqtru5" name="Сообщение об ошибке валидации">
-      <bpmn:incoming>Flow_0zw1xzm</bpmn:incoming>
-    </bpmn:userTask>
-    <bpmn:userTask id="Activity_1jas1tx" name="Сообщение о недостатке рейтинга для создания вопроса">
-      <bpmn:incoming>Flow_18tor3h</bpmn:incoming>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_18lpnvf" name="Проверка репутации пользователя" camunda:delegateExpression="#{checkUserReputation}">
-      <bpmn:extensionElements />
-      <bpmn:incoming>Flow_0iy6jzv</bpmn:incoming>
-      <bpmn:outgoing>Flow_1fe1f8x</bpmn:outgoing>
-    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0hw52zs" sourceRef="Activity_0j6iqab" targetRef="Activity_03cni4n" />
+    <bpmn:sequenceFlow id="Flow_1f5rp6a" sourceRef="Activity_0mlai9d" targetRef="Activity_0j6iqab" />
+    <bpmn:sequenceFlow id="Flow_0iy6jzv" sourceRef="Activity_19w979x" targetRef="Activity_18lpnvf" />
+    <bpmn:sequenceFlow id="Flow_13k2y4f" sourceRef="Activity_02zfrla" targetRef="Activity_1sw14hp" />
+    <bpmn:sequenceFlow id="Flow_1khc58f" sourceRef="Activity_1sw14hp" targetRef="Gateway_1mi9lz5" />
+    <bpmn:sequenceFlow id="Flow_1p3yjzg" sourceRef="Event_06qih9u" targetRef="Activity_1v4bfz3" />
+    <bpmn:sequenceFlow id="Flow_0zw1xzm" sourceRef="Event_0h2188u" targetRef="Activity_0oqtru5" />
+    <bpmn:sequenceFlow id="Flow_048giaw" sourceRef="StartEvent_1" targetRef="Activity_19w979x" />
+    <bpmn:sequenceFlow id="Flow_1fe1f8x" sourceRef="Activity_18lpnvf" targetRef="Activity_02zfrla" />
+    <bpmn:sequenceFlow id="Flow_18tor3h" sourceRef="Event_1om2z8n" targetRef="Activity_1jas1tx" />
+    <bpmn:sequenceFlow id="Flow_02x4fb9" name="Репутации не достаточно" sourceRef="Gateway_1mi9lz5" targetRef="Activity_1j7gj3w">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{reputation &lt; 512}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1hd4mn4" name="Репутации достаточно" sourceRef="Gateway_1mi9lz5" targetRef="Gateway_1bawvuk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{reputation &gt;= 512}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0i3sb63" sourceRef="Activity_1j7gj3w" targetRef="Gateway_1bawvuk" />
+    <bpmn:sequenceFlow id="Flow_0k1vjki" sourceRef="Gateway_1bawvuk" targetRef="Activity_0mlai9d" />
+    <bpmn:sequenceFlow id="Flow_1df873r" sourceRef="Activity_0aufay6" targetRef="Event_08zriwb" />
     <bpmn:boundaryEvent id="Event_0h2188u" attachedToRef="Activity_02zfrla">
       <bpmn:outgoing>Flow_0zw1xzm</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0e9q8g8" errorRef="Error_0unhpsm" camunda:errorMessageVariable="Error_Message" />
@@ -60,15 +61,44 @@
       <bpmn:outgoing>Flow_18tor3h</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_09t1hu7" errorRef="Error_1d5czt3" camunda:errorMessageVariable="Error_Message" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0iy6jzv" sourceRef="Activity_19w979x" targetRef="Activity_18lpnvf" />
-    <bpmn:sequenceFlow id="Flow_13k2y4f" sourceRef="Activity_02zfrla" targetRef="Activity_1sw14hp" />
-    <bpmn:sequenceFlow id="Flow_1khc58f" sourceRef="Activity_1sw14hp" targetRef="Gateway_1mi9lz5" />
-    <bpmn:sequenceFlow id="Flow_1p3yjzg" sourceRef="Event_06qih9u" targetRef="Activity_1v4bfz3" />
-    <bpmn:sequenceFlow id="Flow_0zw1xzm" sourceRef="Event_0h2188u" targetRef="Activity_0oqtru5" />
-    <bpmn:sequenceFlow id="Flow_0c9fuyy" sourceRef="Activity_1cm3cgz" targetRef="Activity_0aufay6" />
-    <bpmn:sequenceFlow id="Flow_048giaw" sourceRef="StartEvent_1" targetRef="Activity_19w979x" />
-    <bpmn:sequenceFlow id="Flow_1fe1f8x" sourceRef="Activity_18lpnvf" targetRef="Activity_02zfrla" />
-    <bpmn:sequenceFlow id="Flow_18tor3h" sourceRef="Event_1om2z8n" targetRef="Activity_1jas1tx" />
+    <bpmn:boundaryEvent id="Event_06qih9u" attachedToRef="Activity_1sw14hp">
+      <bpmn:outgoing>Flow_1p3yjzg</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0cg4zm8" errorRef="Error_1lkaolz" camunda:errorMessageVariable="Error_Message" />
+    </bpmn:boundaryEvent>
+    <bpmn:subProcess id="Activity_0j6iqab">
+      <bpmn:incoming>Flow_1f5rp6a</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hw52zs</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="questionTagsCollection" camunda:elementVariable="tag" />
+      <bpmn:startEvent id="Event_1vmf5xt" name="Очередной тег">
+        <bpmn:outgoing>Flow_03wln2k</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_03wln2k" sourceRef="Event_1vmf5xt" targetRef="Activity_08sblq7" />
+      <bpmn:serviceTask id="Activity_08sblq7" name="Опубликовать сообщение об использовании тега в Kafka" camunda:delegateExpression="#{publishTagUsageToKafka}">
+        <bpmn:incoming>Flow_03wln2k</bpmn:incoming>
+        <bpmn:outgoing>Flow_0wk04bd</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:endEvent id="Event_0vk5lzy">
+        <bpmn:incoming>Flow_0wk04bd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0wk04bd" sourceRef="Activity_08sblq7" targetRef="Event_0vk5lzy" />
+    </bpmn:subProcess>
+    <bpmn:serviceTask id="Activity_0mlai9d" name="Опубликовать вопрос" camunda:delegateExpression="#{publishQuestion}">
+      <bpmn:incoming>Flow_0k1vjki</bpmn:incoming>
+      <bpmn:outgoing>Flow_1f5rp6a</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1bawvuk">
+      <bpmn:incoming>Flow_0i3sb63</bpmn:incoming>
+      <bpmn:incoming>Flow_1hd4mn4</bpmn:incoming>
+      <bpmn:outgoing>Flow_0k1vjki</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_1mi9lz5" name="Проверка репутации">
+      <bpmn:incoming>Flow_1khc58f</bpmn:incoming>
+      <bpmn:outgoing>Flow_02x4fb9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1hd4mn4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Activity_1v4bfz3" name="Сообщение о недостатке репутации для создания тега">
+      <bpmn:incoming>Flow_1p3yjzg</bpmn:incoming>
+    </bpmn:userTask>
     <bpmn:subProcess id="Activity_1sw14hp">
       <bpmn:incoming>Flow_13k2y4f</bpmn:incoming>
       <bpmn:outgoing>Flow_1khc58f</bpmn:outgoing>
@@ -104,7 +134,9 @@
         <bpmn:incoming>Flow_0fyqja0</bpmn:incoming>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_0cmj0rs" errorRef="Error_1lkaolz" />
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_10mpoce" name="Репутации достаточно" sourceRef="Gateway_0g0hr0p" targetRef="Activity_1lz6fsd" />
+      <bpmn:sequenceFlow id="Flow_10mpoce" name="Репутации достаточно" sourceRef="Gateway_0g0hr0p" targetRef="Activity_1lz6fsd">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{reputation &gt;= 1024}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:endEvent id="Event_1fzpue0" name="Создан новый тег">
         <bpmn:incoming>Flow_03o7gti</bpmn:incoming>
       </bpmn:endEvent>
@@ -118,47 +150,42 @@
         <bpmn:outgoing>Flow_03o7gti</bpmn:outgoing>
       </bpmn:serviceTask>
     </bpmn:subProcess>
-    <bpmn:boundaryEvent id="Event_06qih9u" attachedToRef="Activity_1sw14hp">
-      <bpmn:outgoing>Flow_1p3yjzg</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0cg4zm8" errorRef="Error_1lkaolz" camunda:errorMessageVariable="Error_Message" />
-    </bpmn:boundaryEvent>
-    <bpmn:userTask id="Activity_1v4bfz3" name="Сообщение о недостатке репутации для создания тега">
-      <bpmn:incoming>Flow_1p3yjzg</bpmn:incoming>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_1mi9lz5" name="Проверка репутации">
-      <bpmn:incoming>Flow_1khc58f</bpmn:incoming>
-      <bpmn:outgoing>Flow_02x4fb9</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1hd4mn4</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="Gateway_1bawvuk">
-      <bpmn:incoming>Flow_0i3sb63</bpmn:incoming>
-      <bpmn:incoming>Flow_1hd4mn4</bpmn:incoming>
-      <bpmn:outgoing>Flow_0k1vjki</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0mlai9d" name="Опубликовать вопрос" camunda:delegateExpression="#{publishQuestion}">
-      <bpmn:incoming>Flow_0k1vjki</bpmn:incoming>
-      <bpmn:outgoing>Flow_1v6bfzz</bpmn:outgoing>
+    <bpmn:sendTask id="Activity_03cni4n" name="Отправить сообщение сборщику статистики тегов" camunda:delegateExpression="#{triggerTagUsageListener}">
+      <bpmn:incoming>Flow_0hw52zs</bpmn:incoming>
+      <bpmn:outgoing>Flow_00qgg61</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:serviceTask id="Activity_18lpnvf" name="Проверка репутации пользователя" camunda:delegateExpression="#{checkUserReputation}">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0iy6jzv</bpmn:incoming>
+      <bpmn:outgoing>Flow_1fe1f8x</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:task id="Activity_1cm3cgz" name="Kafka">
-      <bpmn:incoming>Flow_1v6bfzz</bpmn:incoming>
-      <bpmn:outgoing>Flow_0c9fuyy</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:sequenceFlow id="Flow_02x4fb9" name="Репутации не достаточно" sourceRef="Gateway_1mi9lz5" targetRef="Activity_1j7gj3w">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{reputation &lt; 512}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1hd4mn4" name="Репутации достаточно" sourceRef="Gateway_1mi9lz5" targetRef="Gateway_1bawvuk" />
-    <bpmn:sequenceFlow id="Flow_0i3sb63" sourceRef="Activity_1j7gj3w" targetRef="Gateway_1bawvuk" />
-    <bpmn:sequenceFlow id="Flow_0k1vjki" sourceRef="Gateway_1bawvuk" targetRef="Activity_0mlai9d" />
-    <bpmn:sequenceFlow id="Flow_1v6bfzz" sourceRef="Activity_0mlai9d" targetRef="Activity_1cm3cgz" />
+    <bpmn:userTask id="Activity_1jas1tx" name="Сообщение о недостатке рейтинга для создания вопроса">
+      <bpmn:incoming>Flow_18tor3h</bpmn:incoming>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0oqtru5" name="Сообщение об ошибке валидации">
+      <bpmn:incoming>Flow_0zw1xzm</bpmn:incoming>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_02zfrla" name="Валидация введенных пользователем данных" camunda:delegateExpression="#{validateQuestionData}">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1fe1f8x</bpmn:incoming>
+      <bpmn:outgoing>Flow_13k2y4f</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_19w979x" name="Пользователь заполняет форму вопроса" camunda:formKey="camunda-forms:/forms/addQuestionForm.form" camunda:candidateGroups="users">
+      <bpmn:incoming>Flow_048giaw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0iy6jzv</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="StartEvent_1" name="Пользователь хочет задать вопрос">
+      <bpmn:outgoing>Flow_048giaw</bpmn:outgoing>
+    </bpmn:startEvent>
     <bpmn:endEvent id="Event_08zriwb" name="Вопрос опубликован">
       <bpmn:incoming>Flow_1df873r</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:userTask id="Activity_0aufay6" name="Уведомление об успешной публикации">
-      <bpmn:incoming>Flow_0c9fuyy</bpmn:incoming>
+      <bpmn:incoming>Flow_00qgg61</bpmn:incoming>
       <bpmn:outgoing>Flow_1df873r</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1df873r" sourceRef="Activity_0aufay6" targetRef="Event_08zriwb" />
-    <bpmn:task id="Activity_1j7gj3w" name="Пометить вопрос как требующий модерации">
+    <bpmn:sequenceFlow id="Flow_00qgg61" sourceRef="Activity_03cni4n" targetRef="Activity_0aufay6" />
+    <bpmn:serviceTask id="Activity_1j7gj3w" name="Пометить вопрос как требующий модерации" camunda:delegateExpression="#{markQuestionAsNotModerated}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="needsModeration">${true}</camunda:outputParameter>
@@ -166,35 +193,45 @@
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_02x4fb9</bpmn:incoming>
       <bpmn:outgoing>Flow_0i3sb63</bpmn:outgoing>
-    </bpmn:task>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="Event_1ik2gfx">
+      <bpmn:outgoing>Flow_0jq1hwz</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0alpp6s" messageRef="Message_3qdo6le" />
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0jq1hwz" sourceRef="Event_1ik2gfx" targetRef="Activity_1alcaus" />
+    <bpmn:serviceTask id="Activity_1alcaus" name="Сбор статистики использования тегов" camunda:delegateExpression="#{kafkaTagUsageListener}">
+      <bpmn:incoming>Flow_0jq1hwz</bpmn:incoming>
+      <bpmn:outgoing>Flow_02353zn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0810w1n">
+      <bpmn:incoming>Flow_02353zn</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_02353zn" sourceRef="Activity_1alcaus" targetRef="Event_0810w1n" />
   </bpmn:process>
   <bpmn:error id="Error_1lkaolz" name="Not_Enough_Rep_For_Tag" errorCode="Not_Enough_Rep_For_Tag" camunda:errorMessage="You don have enough reputation to add new tag" />
   <bpmn:error id="Error_0unhpsm" name="Invalid_Question_Data" errorCode="Invalid_Question_Data" />
   <bpmn:error id="Error_1d5czt3" name="No_Rep_For_Question" errorCode="No_Rep_For_Question" />
+  <bpmn:message id="Message_3qdo6le" name="Trigger_Tag_Usage_Kafka_Listener" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1a1fagl">
       <bpmndi:BPMNShape id="Participant_1ugwcb5_di" bpmnElement="Participant_1ugwcb5" isHorizontal="true">
-        <dc:Bounds x="160" y="77" width="2780" height="983" />
+        <dc:Bounds x="160" y="77" width="3050" height="983" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_1w9vu64_di" bpmnElement="Lane_1w9vu64" isHorizontal="true">
-        <dc:Bounds x="190" y="77" width="2750" height="213" />
+        <dc:Bounds x="190" y="77" width="3020" height="173" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0xg491d_di" bpmnElement="Lane_0xg491d" isHorizontal="true">
-        <dc:Bounds x="190" y="820" width="2750" height="240" />
+        <dc:Bounds x="190" y="820" width="3020" height="240" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_01op23c_di" bpmnElement="Lane_01op23c" isHorizontal="true">
-        <dc:Bounds x="190" y="290" width="2750" height="530" />
+        <dc:Bounds x="190" y="250" width="3020" height="570" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1df873r_di" bpmnElement="Flow_1df873r">
-        <di:waypoint x="2680" y="177" />
-        <di:waypoint x="2752" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1v6bfzz_di" bpmnElement="Flow_1v6bfzz">
-        <di:waypoint x="2340" y="395" />
-        <di:waypoint x="2410" y="395" />
+        <di:waypoint x="3020" y="177" />
+        <di:waypoint x="3092" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0k1vjki_di" bpmnElement="Flow_0k1vjki">
         <di:waypoint x="2175" y="395" />
@@ -231,12 +268,6 @@
         <di:waypoint x="308" y="177" />
         <di:waypoint x="360" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0c9fuyy_di" bpmnElement="Flow_0c9fuyy">
-        <di:waypoint x="2510" y="395" />
-        <di:waypoint x="2530" y="395" />
-        <di:waypoint x="2530" y="177" />
-        <di:waypoint x="2580" y="177" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0zw1xzm_di" bpmnElement="Flow_0zw1xzm">
         <di:waypoint x="830" y="462" />
         <di:waypoint x="830" y="217" />
@@ -258,6 +289,26 @@
         <di:waypoint x="490" y="177" />
         <di:waypoint x="490" y="520" />
         <di:waypoint x="520" y="520" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1f5rp6a_di" bpmnElement="Flow_1f5rp6a">
+        <di:waypoint x="2340" y="395" />
+        <di:waypoint x="2445" y="395" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hw52zs_di" bpmnElement="Flow_0hw52zs">
+        <di:waypoint x="2815" y="395" />
+        <di:waypoint x="2920" y="395" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00qgg61_di" bpmnElement="Flow_00qgg61">
+        <di:waypoint x="2970" y="355" />
+        <di:waypoint x="2970" y="217" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jq1hwz_di" bpmnElement="Flow_0jq1hwz">
+        <di:waypoint x="288" y="940" />
+        <di:waypoint x="340" y="940" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02353zn_di" bpmnElement="Flow_02353zn">
+        <di:waypoint x="440" y="940" />
+        <di:waypoint x="492" y="940" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="272" y="159" width="36" height="36" />
@@ -283,6 +334,31 @@
       <bpmndi:BPMNShape id="Activity_00vj7m7_di" bpmnElement="Activity_18lpnvf">
         <dc:Bounds x="520" y="480" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04js83x_di" bpmnElement="Activity_03cni4n">
+        <dc:Bounds x="2920" y="355" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08zriwb_di" bpmnElement="Event_08zriwb">
+        <dc:Bounds x="3092" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3077" y="202" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03xsltd_di" bpmnElement="Activity_0aufay6">
+        <dc:Bounds x="2920" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13hnm8k_di" bpmnElement="Activity_1j7gj3w">
+        <dc:Bounds x="1960" y="355" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1y3m5rb_di" bpmnElement="Event_1ik2gfx">
+        <dc:Bounds x="252" y="922" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07k9q9x_di" bpmnElement="Activity_1alcaus">
+        <dc:Bounds x="340" y="900" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0810w1n_di" bpmnElement="Event_0810w1n">
+        <dc:Bounds x="492" y="922" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1sw14hp_di" bpmnElement="Activity_1sw14hp" isExpanded="true">
         <dc:Bounds x="990" y="355" width="750" height="330" />
@@ -384,21 +460,29 @@
         <dc:Bounds x="2240" y="355" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1cm3cgz_di" bpmnElement="Activity_1cm3cgz">
-        <dc:Bounds x="2410" y="355" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="Activity_0j6iqab_di" bpmnElement="Activity_0j6iqab" isExpanded="true">
+        <dc:Bounds x="2445" y="295" width="370" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_08zriwb_di" bpmnElement="Event_08zriwb">
-        <dc:Bounds x="2752" y="159" width="36" height="36" />
+      <bpmndi:BPMNEdge id="Flow_03wln2k_di" bpmnElement="Flow_03wln2k">
+        <di:waypoint x="2521" y="395" />
+        <di:waypoint x="2580" y="395" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wk04bd_di" bpmnElement="Flow_0wk04bd">
+        <di:waypoint x="2680" y="395" />
+        <di:waypoint x="2737" y="395" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1vmf5xt_di" bpmnElement="Event_1vmf5xt">
+        <dc:Bounds x="2485" y="377" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2737" y="202" width="66" height="27" />
+          <dc:Bounds x="2465" y="420" width="77" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_03xsltd_di" bpmnElement="Activity_0aufay6">
-        <dc:Bounds x="2580" y="137" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1hb1695_di" bpmnElement="Activity_08sblq7">
+        <dc:Bounds x="2580" y="355" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0915w5y_di" bpmnElement="Activity_1j7gj3w">
-        <dc:Bounds x="1960" y="355" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_0vk5lzy_di" bpmnElement="Event_0vk5lzy">
+        <dc:Bounds x="2737" y="377" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0bm970u_di" bpmnElement="Event_06qih9u">
         <dc:Bounds x="1606" y="337" width="36" height="36" />
